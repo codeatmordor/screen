@@ -32,6 +32,7 @@ public class Screen implements Serializable {
 
 	private byte[] screenshot;
 
+	@Column(name = "status" , columnDefinition = "ENUM")
 	private String status;
 
 	public Screen() {
