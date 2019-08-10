@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -41,6 +42,17 @@ public class ScreenService {
 
 	@Autowired
 	private ScreenRepository screenRepo;
+	
+	private static boolean done = false;
+
+	
+
+	@PostConstruct
+	public void init() {
+		ScreenGrabber sg = new ScreenGrabber();
+		ScreenGrabber.setScRepo(screenRepo);
+		// sg.startApp(new String[2]);
+	}
 
 	public GetStatusResponse getStatus(GetStatusRequest reg) {
 
@@ -51,33 +63,31 @@ public class ScreenService {
 		r.setStatus(ps);
 		return r;
 	}
+	
+	private void start() {
+		ScreenGrabber sg = new ScreenGrabber();
+		ScreenGrabber.setScRepo(screenRepo);
+		done=true;
+		sg.startApp(new String[2]);
+	}
 
 	public void createScreenShot(String customerId, final GenerateScreenShotRequest rq)
 			throws URISyntaxException, InterruptedException, IOException {
+		System.out.println(done);
+		if (!done) {
+			 Runnable r = () ->start();
+			 new Thread(r).start();			
+		}
 		List<String> sts = rq.getUrls();
 		for (String string : sts) {
-			ScreenGrabber sg = new ScreenGrabber();
-			sg.setScRepo(screenRepo);
-			String[] args = new String[2];
-			args[0] = string;
-			// sg.startApp(args);
-
-			/*
-			 * Runnable r = () -> sg.startApp(args); Thread t = new Thread(r); t.start();
-			 * t.join();
-			 */
-
-			// sg.startApp(args);
-
 			Screen sc = new Screen();
 			sc.setRequestUrl(string);
 			sc.setRequestUrlDomain(new URI(string).getHost());
 			sc.setCreated(new Date());
-			sc.setStatus(RequestStatus.COMPLETED.name());
-			sc.setScreenshot(sg.getRes());
+			sc.setStatus(RequestStatus.PENDING.name());
+			// sc.setScreenshot(sg.getRes());
 			sc.setCustomerId(customerId);
 			screenRepo.save(sc);
-
 		}
 	}
 
