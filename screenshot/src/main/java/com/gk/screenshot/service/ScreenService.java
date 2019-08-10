@@ -49,8 +49,8 @@ public class ScreenService {
 
 	@PostConstruct
 	public void init() {
-		ScreenGrabber sg = new ScreenGrabber();
-		ScreenGrabber.setScRepo(screenRepo);
+		ScreenShotGenerator sg = new ScreenShotGenerator();
+		ScreenShotGenerator.setScRepo(screenRepo);
 		// sg.startApp(new String[2]);
 	}
 
@@ -72,8 +72,8 @@ public class ScreenService {
 	}
 
 	private void start() {
-		ScreenGrabber sg = new ScreenGrabber();
-		ScreenGrabber.setScRepo(screenRepo);
+		ScreenShotGenerator sg = new ScreenShotGenerator();
+		ScreenShotGenerator.setScRepo(screenRepo);
 		done = true;
 		sg.startApp(new String[2]);
 	}

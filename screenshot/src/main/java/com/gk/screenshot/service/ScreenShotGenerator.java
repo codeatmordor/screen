@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ScreenGrabber extends Application {
+public class ScreenShotGenerator extends Application {
 
 	private static String url;
 	private static String domain;
@@ -46,7 +46,7 @@ public class ScreenGrabber extends Application {
 	}
 
 	public static void setCount(int count) {
-		ScreenGrabber.count = count;
+		ScreenShotGenerator.count = count;
 	}
 
 	public static ScreenRepository getScRepo() {
@@ -54,7 +54,7 @@ public class ScreenGrabber extends Application {
 	}
 
 	public static void setScRepo(ScreenRepository scRepo) {
-		ScreenGrabber.scRepo = scRepo;
+		ScreenShotGenerator.scRepo = scRepo;
 	}
 
 	public static void startApp(String[] args) {
