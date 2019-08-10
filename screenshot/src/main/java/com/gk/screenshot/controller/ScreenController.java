@@ -10,6 +10,7 @@ import com.gk.screenshot.dal.ScreenRepository;
 import com.gk.screenshot.model.GenerateScreenShotRequest;
 import com.gk.screenshot.model.GetStatusRequest;
 import com.gk.screenshot.model.GetStatusResponse;
+import com.gk.screenshot.model.ScreenShotReponseDto;
 import com.gk.screenshot.service.ScreenService;
 
 import io.swagger.annotations.Api;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 //@Api(value="Screen Management System", description="Operations pertaining to Screen in Screen Management System")
 public class ScreenController {
 	@Autowired
-	ScreenService cricketerService;
+	ScreenService ss;
 	
 	@Autowired
 	ScreenRepository screenRepository;
@@ -37,15 +38,15 @@ public class ScreenController {
 
 	@ApiOperation(value = "View a list of available employees", response = GetStatusResponse.class)
 	@PostMapping("/api/screens")
-	public ResponseEntity<GetStatusResponse> getStatus(@Valid @RequestBody GetStatusRequest r) {
+	public ResponseEntity<ScreenShotReponseDto> getStatus(@RequestHeader(value= "customer_id" ,required=true) String customerId,@Valid @RequestBody GetStatusRequest r) {
 	
-		return new ResponseEntity<GetStatusResponse>(cricketerService.getStatus(r), HttpStatus.OK);
+		return new ResponseEntity<ScreenShotReponseDto>(ss.getStatus(customerId,r), HttpStatus.OK);
 	}
 	
 	@PostMapping("/api/screens/snaps")
-	public ResponseEntity<Integer> create(@RequestHeader(value= "customer_id" ,required=true) String customerId, @Valid @RequestBody GenerateScreenShotRequest r) throws URISyntaxException, InterruptedException, IOException {
-		cricketerService.createScreenShot(customerId, r);
-		return new ResponseEntity<>( HttpStatus.ACCEPTED);
+	public ResponseEntity<ScreenShotReponseDto> create(@RequestHeader(value= "customer_id" ,required=true) String customerId, @Valid @RequestBody GenerateScreenShotRequest r) throws URISyntaxException, InterruptedException, IOException {
+		
+		return new ResponseEntity<>(ss.createScreenShot(customerId, r), HttpStatus.ACCEPTED);
 	}
 	
 	

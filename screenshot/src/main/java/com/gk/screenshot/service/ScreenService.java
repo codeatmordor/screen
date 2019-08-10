@@ -1,6 +1,7 @@
 package com.gk.screenshot.service;
 
 import java.awt.Desktop;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
@@ -26,6 +27,7 @@ import com.gk.screenshot.model.GetStatusRequest;
 import com.gk.screenshot.model.GetStatusResponse;
 import com.gk.screenshot.model.Pair;
 import com.gk.screenshot.model.RequestStatus;
+import com.gk.screenshot.model.ScreenShotReponseDto;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -42,10 +44,8 @@ public class ScreenService {
 
 	@Autowired
 	private ScreenRepository screenRepo;
-	
-	private static boolean done = false;
 
-	
+	private static boolean done = false;
 
 	@PostConstruct
 	public void init() {
@@ -54,31 +54,39 @@ public class ScreenService {
 		// sg.startApp(new String[2]);
 	}
 
-	public GetStatusResponse getStatus(GetStatusRequest reg) {
-
-		GetStatusResponse r = new GetStatusResponse();
-		Pair<String, RequestStatus> p = new Pair<String, RequestStatus>("11", RequestStatus.PENDING);
-		List<Pair<String, RequestStatus>> ps = new ArrayList<>();
-		ps.add(p);
-		r.setStatus(ps);
-		return r;
+	public ScreenShotReponseDto getStatus(String customerId, GetStatusRequest reg) {
+		if (reg.getRequest_ids() != null && !reg.getRequest_ids().isEmpty()) {
+			List<Screen> sc_res = screenRepo.findAllById(reg.getRequest_ids());
+			ScreenShotReponseDto res = new ScreenShotReponseDto();
+			res.setScs(sc_res);
+			try {
+				res.setIm(ImageIO.read(new ByteArrayInputStream(sc_res.get(0).getScreenshot())));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return res;
+		} else {
+			throw new ScreenShotException("Invalid Arguments");
+		}
 	}
-	
+
 	private void start() {
 		ScreenGrabber sg = new ScreenGrabber();
 		ScreenGrabber.setScRepo(screenRepo);
-		done=true;
+		done = true;
 		sg.startApp(new String[2]);
 	}
 
-	public void createScreenShot(String customerId, final GenerateScreenShotRequest rq)
+	public ScreenShotReponseDto createScreenShot(String customerId, final GenerateScreenShotRequest rq)
 			throws URISyntaxException, InterruptedException, IOException {
 		System.out.println(done);
 		if (!done) {
-			 Runnable r = () ->start();
-			 new Thread(r).start();			
+			Runnable r = () -> start();
+			new Thread(r).start();
 		}
 		List<String> sts = rq.getUrls();
+		List<Screen> scs = new ArrayList<>();
 		for (String string : sts) {
 			Screen sc = new Screen();
 			sc.setRequestUrl(string);
@@ -87,8 +95,12 @@ public class ScreenService {
 			sc.setStatus(RequestStatus.PENDING.name());
 			// sc.setScreenshot(sg.getRes());
 			sc.setCustomerId(customerId);
-			screenRepo.save(sc);
+			scs.add(sc);
 		}
+		List<Screen> sc_res = screenRepo.saveAll(scs);
+		ScreenShotReponseDto res = new ScreenShotReponseDto();
+		res.setScs(sc_res);
+		return res;
 	}
 
 }

@@ -67,7 +67,7 @@ public class ScreenGrabber extends Application {
 	@Override
 	public void start(Stage arg0) throws Exception {
 		Platform.runLater(() -> {
-			// while(true) {
+			while(true) {
 			Set<Screen> scs = scRepo.findAllForStatus(RequestStatus.PENDING.name());
 			if (scs != null && !scs.isEmpty()) {
 
@@ -90,6 +90,7 @@ public class ScreenGrabber extends Application {
 				sc_state.setStatus("COMPLETED");
 				scRepo.save(sc_state);
 				
+			}
 			}
 			/*
 			 * try { Thread.sleep(10000); } catch (InterruptedException e) { // TODO
