@@ -3,6 +3,9 @@ package com.gk.screenshot.model;
 import java.util.List;
 
 public class GetStatusRequest {
+	
+	//https://github.com/buckyroberts/Webpage-Screenshot/blob/master/src/sample/Browser.java
+	
 	private List<String> request_ids;
 	public List<String> getRequest_ids() {
 		return request_ids;
