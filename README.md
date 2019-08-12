@@ -1,4 +1,4 @@
-# screen
+# ScreenShot
 
 # Prerequisite
 1. Maven
