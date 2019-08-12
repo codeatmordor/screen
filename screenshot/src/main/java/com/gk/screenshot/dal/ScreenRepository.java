@@ -12,5 +12,9 @@ public interface ScreenRepository extends JpaRepository<Screen,String>{
 	
 	@Query("SELECT s FROM Screen s  WHERE s.status=(:status)")
     Set<Screen> findAllForStatus(@Param("status") final String status);
-
+	
+	
+	@Query("SELECT s FROM Screen s  WHERE s.requestUrlDomain=(:requestUrlDomain) and s.customerId=(:customerId)")
+    Set<Screen> findAllForUrl(@Param("requestUrlDomain") final String requestUrlDomain, @Param("customerId") String customerId);
+	
 }

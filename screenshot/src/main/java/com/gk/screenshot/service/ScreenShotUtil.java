@@ -1,13 +1,12 @@
 package com.gk.screenshot.service;
 
 import java.net.URL;
-import java.util.Set;
+import java.util.List;
 
 public class ScreenShotUtil {
 	
-	public static int count=0;
-	
-	public static void validateUrl(Set<String> urls) {
+
+	public static void validateUrl(List<String> urls) {
 		for (String string : urls) {		
 			try {
 				new URL(string).toURI();
@@ -16,5 +15,13 @@ public class ScreenShotUtil {
 			}
 		}
 	}
-
+	
+	public static void validateRequest(List<String> urls) {
+		if(urls==null || urls.isEmpty()) {
+			throw new ScreenShotException("Request is empty.");
+		}else if(urls.size()>1000) {
+			throw new ScreenShotException("Request exceeds limit of 1000.");
+		}
+		validateUrl(urls);
+	}
 }

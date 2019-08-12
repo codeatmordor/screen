@@ -7,20 +7,19 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
 
-
 /**
  * The persistent class for the screen database table.
  * 
  */
 @Entity
-@NamedQuery(name="Screen.findAll", query="SELECT s FROM Screen s")
+@NamedQuery(name = "Screen.findAll", query = "SELECT s FROM Screen s")
 public class Screen implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Temporal(TemporalType.DATE)
 	private Date created;
 
-	@Column(name="customer_id")
+	@Column(name = "customer_id")
 	private String customerId;
 
 	@Id
@@ -28,15 +27,15 @@ public class Screen implements Serializable {
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	private String id;
 
-	@Column(name="request_url")
+	@Column(name = "request_url")
 	private String requestUrl;
 
-	@Column(name="request_url_domain")
+	@Column(name = "request_url_domain")
 	private String requestUrlDomain;
 
 	private byte[] screenshot;
 
-	@Column(name = "status" , columnDefinition = "ENUM")
+	@Column(name = "status", columnDefinition = "ENUM")
 	private String status;
 
 	public Screen() {

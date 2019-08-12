@@ -14,6 +14,7 @@ class Webpage extends Region {
         WebEngine webEngine = browser.getEngine();
         webEngine.load(url);
         getChildren().add(browser);
+        System.out.println("Browser Created.");
     }
 
     Boolean isPageLoaded(){

@@ -1,30 +1,22 @@
 package com.gk.screenshot.model;
 
-import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.List;
 
-import com.gk.screenshot.dal.Screen;
-
 public class ScreenShotReponseDto implements Serializable{
 	
-	List<Screen> scs ;
-	BufferedImage im;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7597209125766661960L;
+	List<ScreenDTO> scs ;
 
-	public BufferedImage getIm() {
-		return im;
-	}
-
-	public void setIm(BufferedImage im) {
-		this.im = im;
-	}
-
-	public List<Screen> getScs() {
+	public List<ScreenDTO> getScs() {
 		return scs;
 	}
 
-	public void setScs(List<Screen> scs) {
+	public void setScs(List<ScreenDTO> scs) {
 		this.scs = scs;
 	}
-
+	
 }
